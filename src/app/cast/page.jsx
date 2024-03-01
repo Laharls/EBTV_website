@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from 'react';
 
 async function fetchingData(id) {
-    const query = await fetch(`https://anthonyurbanski.fr/api/toornament/sp3/s2/division?stage_ids=${id}`, {
+    const query = await fetch(`http://localhost:8000/api/toornament/sp3/s2/division?stage_ids=${id}`, {
         method: "GET",
     });
     return query; // Return the response directly
@@ -26,6 +26,7 @@ const stageIdMap = {
 
 const Cast = () => {
     const [divisionData, setDivisionData] = useState(null);
+    const [divisionNumber, setDivisionNumber] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
 
@@ -37,6 +38,7 @@ const Cast = () => {
 
                 const queryParams = new URLSearchParams(window.location.search);
                 const divisionId = queryParams.get('division'); // value1
+                setDivisionNumber(divisionId);
 
                 // Call the fetchingData function to get the data from the API route
                 const response = await fetchingData(stageIdMap[divisionId]);
@@ -60,7 +62,7 @@ const Cast = () => {
     }, []);
 
     return (
-        <div className="h-full flex flex-col px-4 justify-center sm:px-8 md:px-12 lg:px-20">
+        <div className="h-screen flex flex-col px-4 justify-center sm:px-8 md:px-12 lg:px-20">
 
             {isLoading &&
                 <div className="flex items-center justify-center h-full">
@@ -75,76 +77,80 @@ const Cast = () => {
             }
 
             {!isLoading &&
-                <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                            <tr>
-                                <th scope="col" className="px-6 py-3 text-center">
-                                    Rang
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Equipe
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    J
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    V
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    D
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    M+
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    M-
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    +/-
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Pts
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            {divisionData?.map((team) => (
-                                <tr key={team.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                    <th scope="row" className="px-6 py-4 font-medium text-center text-gray-900 whitespace-nowrap dark:text-white">
-                                        {team.position}
+                <div>
+                    <h1 className="text-5xl font-semibold mb-4">Division {divisionNumber}</h1>
+                    <div className="relative overflow-x-auto shadow-md sm:rounded-lg xl:max-w-5xl">
+                        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" className="px-6 py-7 text-center">
+                                        Rang
                                     </th>
-                                    <td className="px-6 py-4 flex">
-                                        <div className="mr-2">
-                                            <Image src={team.participant ? team.participant?.custom_fields.logo?.icon_small : ""} alt="" width={25} height={25} /> </div>                                        <div className="w-40">{team.participant?.name}</div>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {team.properties.played}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {team.properties.wins}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {team.properties.losses}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {team.properties.score_for}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {team.properties.score_against}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {team.properties.score_difference}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {team.points === null ? "0" : team.points}
-                                    </td>
+                                    <th scope="col" className="px-6 py-7">
+                                        Equipe
+                                    </th>
+                                    <th scope="col" className="px-6 py-7 text-center">
+                                        J
+                                    </th>
+                                    <th scope="col" className="px-6 py-7 text-center">
+                                        V
+                                    </th>
+                                    <th scope="col" className="px-6 py-7 text-center">
+                                        D
+                                    </th>
+                                    <th scope="col" className="px-6 py-7 text-center">
+                                        M+
+                                    </th>
+                                    <th scope="col" className="px-6 py-7 text-center">
+                                        M-
+                                    </th>
+                                    <th scope="col" className="px-6 py-7 text-center">
+                                        +/-
+                                    </th>
+                                    <th scope="col" className="px-6 py-7 text-center">
+                                        Pts
+                                    </th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+
+                                {divisionData?.map((team) => (
+                                    <tr key={team.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                        <th scope="row" className="px-6 py-4 text-center font-semibold text-xl text-gray-900 whitespace-nowrap dark:text-white">
+                                            {team.position}
+                                        </th>
+                                        <td className="px-6 py-8 flex">
+                                            <div className="mr-2">
+                                                <Image src={team.participant ? team.participant?.custom_fields.logo?.icon_small : ""} alt="" width={25} height={25} /> </div> <div className="w-40 lg:w-auto font-semibold text-xl">{team.participant?.name}</div>
+                                        </td>
+                                        <td className="px-6 py-8 text-center font-semibold text-xl">
+                                            {team.properties.played}
+                                        </td>
+                                        <td className="px-6 py-8 text-center font-semibold text-xl">
+                                            {team.properties.wins}
+                                        </td>
+                                        <td className="px-6 py-8 text-center font-semibold text-xl">
+                                            {team.properties.losses}
+                                        </td>
+                                        <td className="px-6 py-8 text-center font-semibold text-xl">
+                                            {team.properties.score_for}
+                                        </td>
+                                        <td className="px-6 py-8 text-center font-semibold text-xl">
+                                            {team.properties.score_against}
+                                        </td>
+                                        <td className="px-6 py-8 text-center font-semibold text-xl">
+                                            {team.properties.score_difference}
+                                        </td>
+                                        <td className="px-6 py-8 text-center font-semibold text-xl">
+                                            {team.points === null ? "0" : team.points}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+
 
             }
         </div>
