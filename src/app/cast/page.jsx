@@ -78,36 +78,35 @@ const Cast = () => {
 
             {!isLoading &&
                 <div>
-                    <h1 className="text-5xl font-semibold mb-4">Division {divisionNumber}</h1>
                     <div className="relative overflow-x-auto shadow-md sm:rounded-lg xl:max-w-5xl">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
-                                    <th scope="col" className="px-6 py-7 text-center">
+                                    <th scope="col" className="px-6 py-5 text-center">
                                         Rang
                                     </th>
-                                    <th scope="col" className="px-6 py-7">
+                                    <th scope="col" className="px-6 py-5">
                                         Equipe
                                     </th>
-                                    <th scope="col" className="px-6 py-7 text-center">
+                                    <th scope="col" className="px-6 py-5 text-center">
                                         J
                                     </th>
-                                    <th scope="col" className="px-6 py-7 text-center">
+                                    <th scope="col" className="px-6 py-5 text-center">
                                         V
                                     </th>
-                                    <th scope="col" className="px-6 py-7 text-center">
+                                    <th scope="col" className="px-6 py-5 text-center">
                                         D
                                     </th>
-                                    <th scope="col" className="px-6 py-7 text-center">
+                                    <th scope="col" className="px-6 py-5 text-center">
                                         M+
                                     </th>
-                                    <th scope="col" className="px-6 py-7 text-center">
+                                    <th scope="col" className="px-6 py-5 text-center">
                                         M-
                                     </th>
-                                    <th scope="col" className="px-6 py-7 text-center">
+                                    <th scope="col" className="px-6 py-5 text-center">
                                         +/-
                                     </th>
-                                    <th scope="col" className="px-6 py-7 text-center">
+                                    <th scope="col" className="px-6 py-5 text-center">
                                         Pts
                                     </th>
                                 </tr>
@@ -119,29 +118,29 @@ const Cast = () => {
                                         <th scope="row" className="px-6 py-4 text-center font-semibold text-xl text-gray-900 whitespace-nowrap dark:text-white">
                                             {team.position}
                                         </th>
-                                        <td className="px-6 py-9 flex">
+                                        <td className="px-6 py-10 flex">
                                             <div className="mr-2">
                                                 <Image src={team.participant ? team.participant?.custom_fields.logo?.icon_small : ""} alt="" width={25} height={25} /> </div> <div className="w-40 lg:w-auto font-semibold text-xl">{team.participant?.name}</div>
                                         </td>
-                                        <td className="px-6 py-9 text-center font-semibold text-xl">
+                                        <td className="px-6 py-10 text-center font-semibold text-xl">
                                             {team.properties.played}
                                         </td>
-                                        <td className="px-6 py-9 text-center font-semibold text-xl">
+                                        <td className="px-6 py-10 text-center font-semibold text-xl">
                                             {team.properties.wins}
                                         </td>
-                                        <td className="px-6 py-9 text-center font-semibold text-xl">
+                                        <td className="px-6 py-10 text-center font-semibold text-xl">
                                             {team.properties.losses}
                                         </td>
-                                        <td className="px-6 py-9 text-center font-semibold text-xl">
+                                        <td className="px-6 py-10 text-center font-semibold text-xl">
                                             {team.properties.score_for}
                                         </td>
-                                        <td className="px-6 py-9 text-center font-semibold text-xl">
+                                        <td className="px-6 py-10 text-center font-semibold text-xl">
                                             {team.properties.score_against}
                                         </td>
-                                        <td className="px-6 py-9 text-center font-semibold text-xl">
+                                        <td className="px-6 py-10 text-center font-semibold text-xl">
                                             {team.properties.score_difference}
                                         </td>
-                                        <td className="px-6 py-9 text-center font-semibold text-xl">
+                                        <td className="px-6 py-10 text-center font-semibold text-xl">
                                             {team.points === null ? "0" : team.points}
                                         </td>
                                     </tr>
