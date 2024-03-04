@@ -28,20 +28,6 @@ const Footer = () => {
 
 
         </div>
-
-        // <footer className="h-full flex justify-center bg-black px-4 sm:px-8 md:px-12 lg:px-20">
-        //     <div className="flex flex-col gap-4 justify-center items-center md:flex-row md:justify-between md:w-full">
-        //         <Link href="https://esportbros.tv/">
-        //             <Image src="/ebtv.png" alt="" width={100} height={100} className="" />
-        //         </Link>
-
-        //         <p className="text-white text-sm">CC BY-NC eSportBrosTV - 2024 (La licence Splatoon appartient à Nintendo) | <Link href="https://esportbros.tv/mentions-legales/" className="hover:text-blue-400 ease-in-out duration-200">Mentions légales</Link> </p>
-
-        //         <Link href="https://www.toornament.com/">
-        //             <Image src="/toornament.png" alt="" width={200} height={200} className="" />
-        //         </Link>
-        //     </div>
-        // </footer>
     )
 }
 

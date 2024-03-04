@@ -1,39 +1,83 @@
 'use client'
 
-// const { useState } = require("react")
-
-// import { useState } from 'react'
-
-// const Foo = ({ slug }) => {
-//   const [value, setValue] = useState(slug)
-
-//   return (
-//     <div>
-//       <p>foo is { value }</p>
-//     </div>
-//   )
-// }
-// export default Foo
-
 import Image from "next/image";
 import { useEffect, useState } from 'react';
 
+const stageIdMap = {
+    "7536642295841865728": "1",
+    "7536640081084391424": "2",
+    "7536596345101762560": "3",
+    "7536593471567388672": "4",
+    "7536584899792535552": "5",
+    "7536577779904667648": "6",
+    "7536551181308936192": "7",
+    "7536546455548297216": "8",
+    "7536542055986692096": "9",
+    "7536536195342868480": "10",
+    "7536519095150829568": "11",
+};
+
 async function fetchingData(id) {
-    const query = await fetch(`https://anthonyurbanski.fr/api/toornament/sp3/s2/division?stage_ids=${id}`, {
+    const query = await fetch(`http://localhost:8000/api/toornament/sp3/s2/division?stage_ids=${id}`, {
         method: "GET",
     });
-    return query; // Return the response directly
+    return query;
 }
+
+async function getAllMatchDivision(id) {
+    const query = await fetch(`http://localhost:8000/api/toornament/sp3/s2/matches?stage_ids=${id}`, {
+        method: "GET",
+    });
+
+    return query;
+}
+
+function dateFormatter(date) {
+    const dateTime = new Date(date);
+
+    const formatter = new Intl.DateTimeFormat('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        hour: 'numeric',
+        minute: 'numeric',
+    });
+
+    return formatter.format(dateTime);
+}
+
+// function groupByRoundId(data) {
+//     const sortedData = data.sort((a, b) => a.round_id.localeCompare(b.round_id));
+
+//     // Group the objects by round_id
+//     const groupedData = sortedData.reduce((acc, obj) => {
+//         const roundId = obj.round_id;
+//         if (!acc[roundId]) {
+//             acc[roundId] = [];
+//         }
+//         acc[roundId].push(obj);
+//         return acc;
+//     }, {});
+
+//     const dataArray = Object.values(groupedData);
+
+//     // Create an object with numeric indices for each array
+//     const indexedData = {};
+//     dataArray.forEach((array, index) => {
+//         indexedData[index + 1] = array;
+//     });
+
+//     return indexedData;
+// }
 
 const Ranking = ({ slug }) => {
 
-    const [divisionId, setDivisionId] = useState(slug);
+    const [divisionId] = useState(slug);
     const [divisionData, setDivisionData] = useState(null);
+    const [divisionRound, setDivisionRound] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Call the fetchingData function to get the data from the API route
                 const response = await fetchingData(divisionId);
 
                 if (!response.ok) {
@@ -42,8 +86,31 @@ const Ranking = ({ slug }) => {
 
                 const responseData = await response.json();
 
-                // const responseData = await response.json();
-                setDivisionData(responseData);
+                const divisionRound = await getAllMatchDivision(divisionId);
+
+                if (!divisionRound.ok) {
+                    throw new Error("Failed to fetch match data from API", response);
+                }
+
+                const responseDivisionRound = await divisionRound.json();
+
+                // Use Web Worker for groupByRoundId function
+                const worker = new Worker('/groupByRoundIdWorker.js');
+                worker.postMessage(responseDivisionRound);
+
+                worker.onmessage = function (event) {
+                    setDivisionRound(event.data);
+                };
+
+                // const groupedbyRounds = await groupByRoundId(responseDivisionRound)
+
+                await setDivisionData(responseData);
+
+                // await setDivisionRound(groupedbyRounds);
+
+                return () => {
+                    worker.terminate();
+                };
 
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -54,66 +121,125 @@ const Ranking = ({ slug }) => {
     }, [slug, divisionId]);
 
     return (
-        <div className="flex flex-col gap-4">
-            {/* <div className="flex flex-col justify-center items-center gap-4 overflow-x-scroll sm:overflow-x-auto"> */}
-            <div className="overflow-x-auto">
-                <table className="table-auto w-full">
-                    <thead>
-                        <tr>
-                            <th className="px-4 py-2 text-center">#</th>
-                            <th className="px-4 py-2 text-center">Nom</th>
-                            <th className="px-4 py-2 text-center">J</th>
-                            <th className="px-4 py-2 text-center">V</th>
-                            <th className="px-4 py-2 text-center">D</th>
-                            <th className="px-4 py-2 text-center">M+</th>
-                            <th className="px-4 py-2 text-center">M-</th>
-                            <th className="px-4 py-2 text-center">+/-</th>
-                            <th className="px-4 py-2 text-center">Pts</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {divisionData?.map((team) => (
-                            <tr key={team.id}>
-                                <td className="border px-4 py-2 text-center">{team.position}</td>
-                                <td className="border py-2 flex gap-4 justify-center items-center"> <div className="mr-2"> <Image src={team.participant ? team.participant?.custom_fields.logo?.icon_small : ""} alt="" width={25} height={25} /> </div> <div className="w-40">{team.participant?.name}</div> </td>
-                                <td className="border px-4 py-2 text-center">{team.properties.played}</td>
-                                <td className="border px-4 py-2 text-center">{team.properties.wins}</td>
-                                <td className="border px-4 py-2 text-center">{team.properties.losses}</td>
-                                <td className="border px-4 py-2 text-center">{team.properties.score_for}</td>
-                                <td className="border px-4 py-2 text-center">{team.properties.score_against}</td>
-                                <td className="border px-4 py-2 text-center">{team.properties.score_difference}</td>
-                                <td className="border px-4 py-2 text-center">{team.points === null ? "0" : team.points}</td>
+        <div className="h-full flex flex-col px-4">
+            <div className="mt-4">
+                <h1 className="text-5xl font-bold mb-4">Division {stageIdMap[divisionId]}</h1>
+                <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" className="px-6 py-3 text-center">
+                                    Rang
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    Equipe
+                                </th>
+                                <th scope="col" className="px-6 py-3 text-center">
+                                    J
+                                </th>
+                                <th scope="col" className="px-6 py-3 text-center">
+                                    V
+                                </th>
+                                <th scope="col" className="px-6 py-3 text-center">
+                                    D
+                                </th>
+                                <th scope="col" className="px-6 py-3 text-center">
+                                    M+
+                                </th>
+                                <th scope="col" className="px-6 py-3 text-center">
+                                    M-
+                                </th>
+                                <th scope="col" className="px-6 py-3 text-center">
+                                    +/-
+                                </th>
+                                <th scope="col" className="px-6 py-3 text-center">
+                                    Pts
+                                </th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+
+                            {divisionData?.map((team) => (
+                                <tr key={team.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                    <th scope="row" className="px-6 py-4 font-semibold text-xl text-center text-gray-900 whitespace-nowrap dark:text-white">
+                                        {team.position}
+                                    </th>
+                                    <td className="px-6 py-4 flex">
+                                        <div className="mr-2">
+                                            <Image src={team.participant ? team.participant?.custom_fields.logo?.logo_small : ""} alt="" width={25} height={25} /> </div> <div className="font-semibold text-xl">{team.participant?.name}</div>
+                                    </td>
+                                    <td className="px-6 py-4 text-center font-semibold text-xl">
+                                        {team.properties.played}
+                                    </td>
+                                    <td className="px-6 py-4 text-center font-semibold text-xl">
+                                        {team.properties.wins}
+                                    </td>
+                                    <td className="px-6 py-4 text-center font-semibold text-xl">
+                                        {team.properties.losses}
+                                    </td>
+                                    <td className="px-6 py-4 text-center font-semibold text-xl">
+                                        {team.properties.score_for}
+                                    </td>
+                                    <td className="px-6 py-4 text-center font-semibold text-xl">
+                                        {team.properties.score_against}
+                                    </td>
+                                    <td className="px-6 py-4 text-center font-semibold text-xl">
+                                        {team.properties.score_difference}
+                                    </td>
+                                    <td className="px-6 py-4 text-center font-semibold text-xl">
+                                        {team.points === null ? "0" : team.points}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
+            <div className="mb-4 mt-4">
+                {divisionRound &&
+                    Object.values(divisionRound).map((weekData, weekIndex) => (
+                        <div key={weekIndex} className="flex flex-col mt-2 mb-2">
+                            <h2 className="text-xl font-semibold mb-2">Semaine {weekIndex + 1}</h2>
+                            <div className="flex flex-col flex-wrap gap-4 md:flex-row">
+                                {weekData.map((match, matchIndex) => (
+                                    <div key={matchIndex} className="border flex justify-between p-2 bg-white bg-opacity-80 hover:bg-gray-100 ease-in-out duration-200 rounded md:w-5/12  xl:w-96 hover:border-blue-400">
+                                        <div className="flex flex-col gap-2">
+                                            <div className="flex gap-2 items-center">
+                                                <Image src={match.opponents ? match.opponents[0]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
+                                                <p className="text-sm font-medium">  {match.opponents[0].participant.name}</p>
+                                            </div>
 
-             <div className="flex flex-col">
-                <h1>Semaine 1</h1>
-                <div className="flex flex-col gap-4 md:flex-row">
-                    <div className="border md:w-40">
-                        <p>X-One</p>
-                        <p>Whirpool</p>
-                    </div>
-                    <div className="border md:w-40">
-                        <p>X-One</p>
-                        <p>Whirpool</p>
-                    </div>
+                                            <div className="flex gap-2 items-center">
+                                                <Image src={match.opponents ? match.opponents[1]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
+                                                <p className="text-sm font-medium">{match.opponents[1].participant.name}</p>
 
-                    <div className="border md:w-40">
-                        <p>X-One</p>
-                        <p>Whirpool</p>
-                    </div>
+                                            </div>
 
-                    <div className="border md:w-40">
-                        <p>X-One</p>
-                        <p>Whirpool</p>
-                    </div>
-                </div>
-            </div> 
+                                        </div>
+                                        <div>
+                                            {match.status === "completed" &&
+                                                <div className="mr-6 flex flex-col justify-center items-center gap-2">
+                                                    <p className={`${match.opponents[0].result === 'win' ? 'text-green-600' : 'text-red-600'}`}>{match.opponents[0].score}</p>
+                                                    <p className={`${match.opponents[1].result === 'win' ? 'text-green-600' : 'text-red-600'}`}>{match.opponents[1].score}</p>
+                                                </div>
+                                            }
 
+                                            {match.status === "pending" && match.scheduled_datetime !== null &&
+                                                <div className="h-full flex flex-col justify-center items-center mr-6">
+                                                    <div className="flex flex-col justify-center items-center">
+                                                        <p className="text-sm text-center text-gray-600">{dateFormatter(`${match.scheduled_datetime}`)}</p>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))
+                }
+            </div>
         </div>
     )
 }

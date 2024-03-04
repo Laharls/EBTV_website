@@ -22,7 +22,7 @@ const stageId = [
 
 async function previewRankingData() {
 
-  const toornamentData = await fetch("https://anthonyurbanski.fr/api/toornament/groups", {
+  const toornamentData = await fetch("http://localhost:8000/api/toornament/groups", {
     method: "GET",
   });
 
@@ -35,7 +35,7 @@ async function previewRankingData() {
   for (const data of reverseToornamentData) {
     const { id, stage_id, tournament_id } = data;
 
-    const dataRank = await fetch(`https://anthonyurbanski.fr/api/toornament/rank?tournament_ids=${tournament_id}&stage_ids=${stage_id}&group_ids=${id}`, {
+    const dataRank = await fetch(`http://localhost:8000/api/toornament/rank?tournament_ids=${tournament_id}&stage_ids=${stage_id}&group_ids=${id}`, {
       method: "GET",
     });
 
@@ -80,7 +80,6 @@ const PreviewRank = () => {
 
   return (
     <div className="flex flex-col md:flex-row md:flex-wrap justify-center items-center gap-4">
-      {/* <Link href="/">Saison 2 de la Ligue EBTV Sp3</Link> */}
 
       {isLoading &&
         <div role="status">
@@ -99,16 +98,15 @@ const PreviewRank = () => {
             {<h2 className="text-xl font-semibold"> Division {index + 1}</h2>}
             {innerArray.map((data, innerIndex) => (
               <div key={data.id}>
-                {/* Render content from each data object in the inner array */}
                 <div className="w-56 flex items-center justify-between h-auto">
                   <span className="w-2 text-center">{data.position}</span>
                   <div className="ml-2">
-                    <Image src={data.participant ? data.participant?.custom_fields?.logo?.icon_small : "/ebtv_logo.png"} alt="" width={25} height={25} unoptimized />
+                    <Image src={data.participant ? data.participant?.custom_fields?.logo?.logo_small : "/ebtv_logo.png"} alt="" width={25} height={25} />
                   </div>
-                  <p className="flex-grow ml-2 text-sm"> {/* Use flex-grow to expand */}
+                  <p className="flex-grow ml-2 text-sm font-medium">
                     {data.participant?.name}
                   </p>
-                  <span className="flex justify-center items-center">{data.points ? data.points : 0}</span>
+                  <span className="flex justify-center items-center font-medium">{data.points ? data.points : 0}</span>
                 </div>
                 {/* Conditionally render the line delimiter */}
                 {innerIndex !== innerArray.length - 1 && <hr className="absolute left-1/2 transform -translate-x-1/2 my-2 border-gray-300 w-11/12" />}

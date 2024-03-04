@@ -119,29 +119,29 @@ const Cast = () => {
                                         <th scope="row" className="px-6 py-4 text-center font-semibold text-xl text-gray-900 whitespace-nowrap dark:text-white">
                                             {team.position}
                                         </th>
-                                        <td className="px-6 py-8 flex">
+                                        <td className="px-6 py-9 flex">
                                             <div className="mr-2">
                                                 <Image src={team.participant ? team.participant?.custom_fields.logo?.icon_small : ""} alt="" width={25} height={25} /> </div> <div className="w-40 lg:w-auto font-semibold text-xl">{team.participant?.name}</div>
                                         </td>
-                                        <td className="px-6 py-8 text-center font-semibold text-xl">
+                                        <td className="px-6 py-9 text-center font-semibold text-xl">
                                             {team.properties.played}
                                         </td>
-                                        <td className="px-6 py-8 text-center font-semibold text-xl">
+                                        <td className="px-6 py-9 text-center font-semibold text-xl">
                                             {team.properties.wins}
                                         </td>
-                                        <td className="px-6 py-8 text-center font-semibold text-xl">
+                                        <td className="px-6 py-9 text-center font-semibold text-xl">
                                             {team.properties.losses}
                                         </td>
-                                        <td className="px-6 py-8 text-center font-semibold text-xl">
+                                        <td className="px-6 py-9 text-center font-semibold text-xl">
                                             {team.properties.score_for}
                                         </td>
-                                        <td className="px-6 py-8 text-center font-semibold text-xl">
+                                        <td className="px-6 py-9 text-center font-semibold text-xl">
                                             {team.properties.score_against}
                                         </td>
-                                        <td className="px-6 py-8 text-center font-semibold text-xl">
+                                        <td className="px-6 py-9 text-center font-semibold text-xl">
                                             {team.properties.score_difference}
                                         </td>
-                                        <td className="px-6 py-8 text-center font-semibold text-xl">
+                                        <td className="px-6 py-9 text-center font-semibold text-xl">
                                             {team.points === null ? "0" : team.points}
                                         </td>
                                     </tr>

@@ -12,7 +12,6 @@ const links = [
 
 const socialLinks = [
     { url: "https://discord.gg/ebtv-splatoon", logo: "/discord.png" },
-    { url: "https://www.twitch.tv/esportbrostv", logo: "/twitch.png" },
     { url: "https://twitter.com/esportbrostv", logo: "/twitter.png" },
     { url: "https://www.youtube.com/channel/UCfxjf8qf7UvdOuJxKvvaQ_A", logo: "/youtube.png" },
 ]
@@ -117,19 +116,9 @@ const Navbar = () => {
                 </div>
             </Link>
 
-
-            {/* <div className="hidden text-white gap-4 md:flex">
-                <div>Coucou</div>
-                <div>Coucou</div>
-                <div>Coucou</div>
-            </div> */}
-
             <div className="hidden md:flex gap-4">
                 <Link href="https://discord.gg/ebtv-splatoon" rel="noopener noreferrer" target="_blank" className="text-white">
                     <Image src="/discord.png" alt="" width={35} height={35} unoptimized/>
-                </Link>
-                <Link href="https://www.twitch.tv/esportbrostv" rel="noopener noreferrer" target="_blank" className="text-white">
-                    <Image src="/twitch.png" alt="" width={35} height={35} unoptimized/>
                 </Link>
                 <Link href="https://twitter.com/esportbrostv" rel="noopener noreferrer" target="_blank" className="text-white">
                     <Image src="/twitter.png" alt="" width={35} height={35} unoptimized/>
