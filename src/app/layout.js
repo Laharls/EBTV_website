@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={poppins.className}>
         <div className="flex flex-col min-h-screen" style={{backgroundImage: 'url(/bg_w.webp)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed', minHeight: '100vh'}}>
-          <div className="h-24">
+          <div className="h-16">
             <Navbar />
           </div>
 

@@ -6,7 +6,8 @@ import Link from "next/link"
 import Image from "next/image";
 
 const links = [
-    { url: "/", title: "Home" },
+    { url: "/", title: "Divisions" },
+    { url: "/comingMatchs", title: "Prochains matchs" },
     { url: "https://esportbros.tv/mentions-legales/", title: "Mention Légale" },
 ];
 
@@ -101,30 +102,32 @@ const Navbar = () => {
                     <Image
                         src="/logo_sp3.webp"
                         alt=""
-                        width={50}
-                        height={50}
-                        className="sm:hidden" />
+                        width={35}
+                        height={35}
+                    />
 
-                    <Image
-                        src="/logo_sp3.webp"
-                        alt=""
-                        width={90}
-                        height={90}
-                        className="hidden sm:flex" />
-
-                    <h1 className="text-md font-bold sm:text-xl md:text-3xl text-white">Ligue EBTV</h1>
+                    <h1 className="text-md font-bold sm:text-lg md:text-2xl text-white">Ligue EBTV</h1>
                 </div>
             </Link>
 
+            <div className="hidden md:flex">
+                <nav className="text-white">
+                    <Link href="/" className="hover:text-blue-400 ease-in-out duration-200">Divisions</Link>
+                    <span className="mx-2">|</span>
+                    <Link href="/comingMatchs" className="hover:text-blue-400 ease-in-out duration-200">Prochains matchs</Link>
+                </nav>
+
+            </div>
+
             <div className="hidden md:flex gap-4">
                 <Link href="https://discord.gg/ebtv-splatoon" rel="noopener noreferrer" target="_blank" className="text-white">
-                    <Image src="/discord.png" alt="" width={35} height={35} unoptimized/>
+                    <Image src="/discord.png" alt="" width={35} height={35} unoptimized />
                 </Link>
                 <Link href="https://twitter.com/esportbrostv" rel="noopener noreferrer" target="_blank" className="text-white">
-                    <Image src="/twitter.png" alt="" width={35} height={35} unoptimized/>
+                    <Image src="/twitter.png" alt="" width={35} height={35} unoptimized />
                 </Link>
                 <Link href="https://www.youtube.com/channel/UCfxjf8qf7UvdOuJxKvvaQ_A" rel="noopener noreferrer" target="_blank" className="text-white">
-                    <Image src="/youtube.png" alt="" width={35} height={35} unoptimized/>
+                    <Image src="/youtube.png" alt="" width={35} height={35} unoptimized />
                 </Link>
             </div>
 

@@ -1,6 +1,7 @@
 'use client'
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from 'react';
 
 const stageIdMap = {
@@ -74,6 +75,7 @@ const Ranking = ({ slug }) => {
     const [divisionId] = useState(slug);
     const [divisionData, setDivisionData] = useState(null);
     const [divisionRound, setDivisionRound] = useState(null);
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -120,9 +122,61 @@ const Ranking = ({ slug }) => {
         fetchData();
     }, [slug, divisionId]);
 
+    function handleClickOutside(event) {
+        if (event.target.closest(".dropdown") === null) {
+            setIsOpen(false);
+        }
+    }
+
+    useEffect(() => {
+        if (isOpen) {
+            document.addEventListener("click", handleClickOutside);
+        } else {
+            document.removeEventListener("click", handleClickOutside);
+        }
+
+        // Cleanup the event listener when the component unmounts
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, [isOpen]);
+
     return (
         <div className="h-full flex flex-col px-4">
             <div className="mt-4">
+                <div className="sm:hidden mt-8 mb-8 relative flex justify-center">
+                    <div className="dropdown relative">
+                        <button
+                            onClick={() => setIsOpen(!isOpen)}
+                            className="flex items-center justify-center w-full px-4 py-2 text-sm font-bold text-white bg-gray-900 rounded-md focus:outline-none focus:bg-gray-800 relative z-10"
+                        >
+                            Division
+                            <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                            </svg>
+                        </button>
+                        {isOpen && (
+                            <div className="absolute right-1/2 transform translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-10 max-h-48 overflow-y-auto">
+                                <div className="py-1">
+                                    {Object.entries(stageIdMap).map(([key, divNum]) => (
+                                        <Link key={key} href={`/sp3/s2/${key}`} className="block px-4 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-600">{`D${divNum}`}</Link>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+
+                <div className="hidden sm:flex justify-center mt-8 mb-8">
+                    {stageIdMap &&
+                        <div className="flex items-center space-x-4">
+                            {Object.entries(stageIdMap).map(([key, divNum]) => (
+                                <Link key={key} href={`/sp3/s2/${key}`} className="font-bold text-2xl hover:text-blue-600 ease-in-out duration-200">D{divNum}</Link>
+                            ))}
+                        </div>
+                    }
+                </div>
                 <h1 className="text-5xl font-bold mb-4">Division {stageIdMap[divisionId]}</h1>
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

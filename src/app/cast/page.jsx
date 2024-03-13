@@ -26,7 +26,6 @@ const stageIdMap = {
 
 const Cast = () => {
     const [divisionData, setDivisionData] = useState(null);
-    const [divisionNumber, setDivisionNumber] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
 
@@ -38,7 +37,6 @@ const Cast = () => {
 
                 const queryParams = new URLSearchParams(window.location.search);
                 const divisionId = queryParams.get('division'); // value1
-                setDivisionNumber(divisionId);
 
                 // Call the fetchingData function to get the data from the API route
                 const response = await fetchingData(stageIdMap[divisionId]);
