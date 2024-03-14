@@ -12,6 +12,19 @@ async function fetchComingMatch() {
     return response; // Return the response directly
 }
 
+async function fetchStreamMatch(data) {
+    const query = await fetch(`http://localhost:8000/api/toornament/streamMatches`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    const response = await query.json()
+    return response; // Return the response directly
+}
+
 function dateFormatter(date) {
     const dateTime = new Date(date);
 
@@ -29,6 +42,7 @@ function dateFormatter(date) {
 const ComingMatchs = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isTest, setIsTest] = useState(null);
+    const [streamMatches, setStreamMatches] = useState(null);
 
 
     useEffect(() => {
@@ -38,7 +52,12 @@ const ComingMatchs = () => {
 
                 const comingMatch = await fetchComingMatch();
 
-                setIsTest(comingMatch);
+                const matchIds = comingMatch.map((obj, index) => {
+                    return {
+                        match_id: obj.id,
+                        index: index
+                    };
+                });
 
                 // Group matches by date
                 const matchesByDate = {};
@@ -51,6 +70,10 @@ const ComingMatchs = () => {
                 });
 
                 setIsTest(matchesByDate);
+
+                const streamMatch = await fetchStreamMatch(matchIds);
+
+                setStreamMatches(streamMatch);
 
                 setIsLoading(false);
             } catch (error) {
@@ -68,8 +91,6 @@ const ComingMatchs = () => {
         return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
     };
 
-
-
     return (
         <div className="h-full flex flex-col px-4 mb-8 sm:px-8 md:px-12 lg:px-20">
 
@@ -86,53 +107,107 @@ const ComingMatchs = () => {
             }
 
             {isTest &&
+                <div>
+                    {Object.entries(isTest).map(([date, matches]) => (
+                        <div key={date}>
+                            <h2 className="text-lg font-semibold mt-4 mb-2">{date}</h2>
+                            <div className="flex flex-col flex-wrap gap-4 md:flex-row">
+                                {matches.map((match, matchIndex) => (
+                                    <div key={matchIndex} className="md:w-5/12 xl:w-96">
+                                        {streamMatches?.map((stream) => {
+                                            // Find the match corresponding to the stream
+                                            const correspondingMatch = matches.find(match => match.id === stream.match.match_id);
 
+                                            // Check if a corresponding match is found and its id matches the stream's match_id
+                                            if (correspondingMatch && correspondingMatch?.id === stream.match.match_id) {
+                                                correspondingMatch.url = stream.result.url;
+                                                // return (
+                                                //     <div key={streamIndex} className="flex justify-center items-center">
+                                                //         <Image src="/live.png" alt="Live Icon" width={50} height={50}></Image>
+                                                //     </div>
+                                                // );
+                                            }
+                                        })}
 
-            <div>
-                {Object.entries(isTest).map(([date, matches]) => (
-                    <div key={date}>
-                        <h2 className="text-lg font-semibold mt-4 mb-2">{date}</h2>
-                        <div className="flex flex-col flex-wrap gap-4 md:flex-row">
-                            {matches.map((match, matchIndex) => (
-                                <div key={matchIndex} className="border flex justify-between p-2 bg-white bg-opacity-80 hover:bg-gray-100 ease-in-out duration-200 rounded md:w-5/12 xl:w-96 hover:border-blue-400">
-                                    {/* Render match details */}
-                                    <div className="flex flex-col gap-2">
-                                        <div className="flex gap-2 items-center">
-                                            <Image src={match.opponents ? match.opponents[0]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
-                                            <p className="text-sm font-medium">  {match.opponents[0].participant.name}</p>
-                                        </div>
+                                        {match?.url &&
+                                            <a href={match?.url ? match.url : ''} target="_blank" rel="noopener noreferrer" className="border flex justify-between p-2 bg-white bg-opacity-80 hover:bg-gray-100 ease-in-out duration-200 rounded hover:border-blue-400">
+                                                {/* Render match details */}
+                                                <div className="flex flex-col gap-2">
+                                                    <div className="flex gap-2 items-center">
+                                                        <Image src={match.opponents ? match.opponents[0]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
+                                                        <p className="text-sm font-medium">  {match.opponents[0].participant.name}</p>
+                                                    </div>
 
-                                        <div className="flex gap-2 items-center">
-                                            <Image src={match.opponents ? match.opponents[1]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
-                                            <p className="text-sm font-medium">{match.opponents[1].participant.name}</p>
+                                                    <div className="flex gap-2 items-center">
+                                                        <Image src={match.opponents ? match.opponents[1]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
+                                                        <p className="text-sm font-medium">{match.opponents[1].participant.name}</p>
 
-                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    {match.status === "completed" &&
+                                                        <div className="mr-6 flex flex-col justify-center items-center gap-2">
+                                                            <p className={`${match.opponents[0].result === 'win' ? 'text-green-600' : 'text-red-600'}`}>{match.opponents[0].score}</p>
+                                                            <p className={`${match.opponents[1].result === 'win' ? 'text-green-600' : 'text-red-600'}`}>{match.opponents[1].score}</p>
+                                                        </div>
+                                                    }
 
-                                    </div>
-                                    <div>
-                                        {match.status === "completed" &&
-                                            <div className="mr-6 flex flex-col justify-center items-center gap-2">
-                                                <p className={`${match.opponents[0].result === 'win' ? 'text-green-600' : 'text-red-600'}`}>{match.opponents[0].score}</p>
-                                                <p className={`${match.opponents[1].result === 'win' ? 'text-green-600' : 'text-red-600'}`}>{match.opponents[1].score}</p>
-                                            </div>
+                                                    {match.status === "pending" && match.scheduled_datetime !== null &&
+                                                        <div className="h-full flex flex-col justify-center items-center mr-6">
+                                                            <div className="flex flex-col justify-center items-center">
+                                                                <p className="text-sm text-center text-gray-600">{dateFormatter(`${match.scheduled_datetime}`)}</p>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+
+                                                <div className="flex justify-center items-center">
+                                                    <Image src="/live.png" alt="Live Icon" width={50} height={50}></Image>
+                                                </div>
+                                            </a>
                                         }
 
-                                        {match.status === "pending" && match.scheduled_datetime !== null &&
-                                            <div className="h-full flex flex-col justify-center items-center mr-6">
-                                                <div className="flex flex-col justify-center items-center">
-                                                    <p className="text-sm text-center text-gray-600">{dateFormatter(`${match.scheduled_datetime}`)}</p>
+                                        {!match.url &&
+                                            <div key={matchIndex} href={match?.url ? match.url : ''} className="border flex justify-between p-2 bg-white bg-opacity-80 hover:bg-gray-100 ease-in-out duration-200 rounded hover:border-blue-400">
+                                                {/* Render match details */}
+                                                <div className="flex flex-col gap-2">
+                                                    <div className="flex gap-2 items-center">
+                                                        <Image src={match.opponents ? match.opponents[0]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
+                                                        <p className="text-sm font-medium">  {match.opponents[0].participant.name}</p>
+                                                    </div>
+
+                                                    <div className="flex gap-2 items-center">
+                                                        <Image src={match.opponents ? match.opponents[1]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
+                                                        <p className="text-sm font-medium">{match.opponents[1].participant.name}</p>
+
+                                                    </div>
+
+                                                </div>
+                                                <div>
+                                                    {match.status === "completed" &&
+                                                        <div className="mr-6 flex flex-col justify-center items-center gap-2">
+                                                            <p className={`${match.opponents[0].result === 'win' ? 'text-green-600' : 'text-red-600'}`}>{match.opponents[0].score}</p>
+                                                            <p className={`${match.opponents[1].result === 'win' ? 'text-green-600' : 'text-red-600'}`}>{match.opponents[1].score}</p>
+                                                        </div>
+                                                    }
+
+                                                    {match.status === "pending" && match.scheduled_datetime !== null &&
+                                                        <div className="h-full flex flex-col justify-center items-center mr-6">
+                                                            <div className="flex flex-col justify-center items-center">
+                                                                <p className="text-sm text-center text-gray-600">{dateFormatter(`${match.scheduled_datetime}`)}</p>
+                                                            </div>
+                                                        </div>
+                                                    }
                                                 </div>
                                             </div>
                                         }
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
             }
-            
         </div>
     );
 }
