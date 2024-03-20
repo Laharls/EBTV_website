@@ -110,7 +110,7 @@ const ComingMatchs = () => {
                 <div>
                     {Object.entries(isTest).map(([date, matches]) => (
                         <div key={date}>
-                            <h2 className="text-lg font-semibold mt-4 mb-2">{date}</h2>
+                            <h2 className="text-lg font-semibold mt-4 mb-2 dark:text-white">{date}</h2>
                             <div className="flex flex-col flex-wrap gap-4 md:flex-row">
                                 {matches.map((match, matchIndex) => (
                                     <div key={matchIndex} className="md:w-5/12 xl:w-96">
@@ -130,7 +130,7 @@ const ComingMatchs = () => {
                                         })}
 
                                         {match?.url &&
-                                            <a href={match?.url ? match.url : ''} target="_blank" rel="noopener noreferrer" className="border flex justify-between p-2 bg-white bg-opacity-80 hover:bg-gray-100 ease-in-out duration-200 rounded hover:border-blue-400">
+                                            <a href={match?.url ? match.url : ''} target="_blank" rel="noopener noreferrer" className="border flex justify-between p-2 bg-white dark:bg-gray-800 dark:border-gray-700 hover:dark:bg-gray-900 dark:text-white bg-opacity-80 hover:bg-gray-100 ease-in-out duration-200 rounded hover:border-blue-400">
                                                 {/* Render match details */}
                                                 <div className="flex flex-col gap-2">
                                                     <div className="flex gap-2 items-center">
@@ -155,7 +155,7 @@ const ComingMatchs = () => {
                                                     {match.status === "pending" && match.scheduled_datetime !== null &&
                                                         <div className="h-full flex flex-col justify-center items-center mr-6">
                                                             <div className="flex flex-col justify-center items-center">
-                                                                <p className="text-sm text-center text-gray-600">{dateFormatter(`${match.scheduled_datetime}`)}</p>
+                                                                <p className="text-sm text-center text-gray-600 dark:text-white">{dateFormatter(`${match.scheduled_datetime}`)}</p>
                                                             </div>
                                                         </div>
                                                     }
@@ -168,7 +168,7 @@ const ComingMatchs = () => {
                                         }
 
                                         {!match.url &&
-                                            <div key={matchIndex} href={match?.url ? match.url : ''} className="border flex justify-between p-2 bg-white bg-opacity-80 hover:bg-gray-100 ease-in-out duration-200 rounded hover:border-blue-400">
+                                            <div key={matchIndex} href={match?.url ? match.url : ''} className="border flex justify-between p-2 bg-white dark:bg-gray-800 dark:border-gray-700 hover:dark:bg-gray-900 dark:text-white bg-opacity-80 hover:bg-gray-100 ease-in-out duration-200 rounded hover:border-blue-400">
                                                 {/* Render match details */}
                                                 <div className="flex flex-col gap-2">
                                                     <div className="flex gap-2 items-center">
@@ -194,7 +194,7 @@ const ComingMatchs = () => {
                                                     {match.status === "pending" && match.scheduled_datetime !== null &&
                                                         <div className="h-full flex flex-col justify-center items-center mr-6">
                                                             <div className="flex flex-col justify-center items-center">
-                                                                <p className="text-sm text-center text-gray-600">{dateFormatter(`${match.scheduled_datetime}`)}</p>
+                                                                <p className="text-sm text-center text-gray-600 dark:text-white">{dateFormatter(`${match.scheduled_datetime}`)}</p>
                                                             </div>
                                                         </div>
                                                     }

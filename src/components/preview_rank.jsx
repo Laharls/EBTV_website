@@ -94,7 +94,7 @@ const PreviewRank = () => {
       {!isLoading && previewRanking?.map((innerArray, index) => (
         <Link href={`/sp3/s2/${stageId[index]} `} prefetch={false} key={index}>
 
-          <div key={index} className="flex flex-col  items-baseline border hover:border-blue-400 bg-white bg-opacity-80 hover:bg-gray-100 ease-in-out duration-200 w-64 px-4 rounded gap-4 py-4 relative">
+          <div key={index} className="flex flex-col  items-baseline border hover:border-blue-400 bg-white dark:bg-gray-800 dark:border-gray-700 hover:dark:bg-gray-900 dark:text-white bg-opacity-80 hover:bg-gray-100 ease-in-out duration-200 w-64 px-4 rounded gap-4 py-4 relative">
             {<h2 className="text-xl font-semibold"> Division {index + 1}</h2>}
             {innerArray.map((data, innerIndex) => (
               <div key={data.id}>

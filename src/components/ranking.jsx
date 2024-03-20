@@ -189,12 +189,12 @@ const Ranking = ({ slug }) => {
                     {stageIdMap &&
                         <div className="flex items-center space-x-4">
                             {Object.entries(stageIdMap).map(([key, divNum]) => (
-                                <Link key={key} href={`/sp3/s2/${key}`} className="font-bold text-2xl hover:text-blue-600 ease-in-out duration-200">D{divNum}</Link>
+                                <Link key={key} href={`/sp3/s2/${key}`} className="font-bold text-2xl hover:text-blue-600 ease-in-out duration-200 dark:text-white">D{divNum}</Link>
                             ))}
                         </div>
                     }
                 </div>
-                <h1 className="text-5xl font-bold mb-4">Division {stageIdMap[divisionId]}</h1>
+                <h1 className="text-5xl font-bold mb-4 dark:text-white">Division {stageIdMap[divisionId]}</h1>
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -271,7 +271,7 @@ const Ranking = ({ slug }) => {
                 {divisionRound &&
                     Object.values(divisionRound).map((weekData, weekIndex) => (
                         <div key={weekIndex} className="flex flex-col mt-2 mb-2">
-                            <h2 className="text-xl font-semibold mb-2">Semaine {weekIndex + 1}</h2>
+                            <h2 className="text-xl font-semibold mb-2 dark:text-white">Semaine {weekIndex + 1}</h2>
                             <div className="flex flex-col flex-wrap gap-4 md:flex-row">
                                 {weekData.map((match, matchIndex) => {
                                     const matchingObject = hasVod.find(item => item.match_id === match.id);
@@ -280,7 +280,7 @@ const Ranking = ({ slug }) => {
                                     return (
                                         <Fragment key={matchIndex}>
                                             {linkHref !== null ? (
-                                                <Link href={linkHref} className="border flex justify-between p-2 bg-white bg-opacity-80 hover:bg-gray-100 ease-in-out duration-200 rounded md:w-5/12  xl:w-96 hover:border-blue-400">
+                                                <a href={linkHref} target="_blank" rel="noopener noreferrer" className="border flex justify-between p-2 bg-white dark:bg-gray-800 dark:border-gray-700 hover:dark:bg-gray-900 dark:text-white bg-opacity-80 hover:bg-gray-100 ease-in-out duration-200 rounded md:w-5/12  xl:w-96 hover:border-blue-400">
                                                     <div className="flex flex-col gap-2">
                                                         <div className="flex gap-2 items-center">
                                                             <Image src={match.opponents ? match.opponents[0]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
@@ -306,9 +306,9 @@ const Ranking = ({ slug }) => {
                                                             <Image src="/vod.png" alt="Vod Icon" width={50} height={50}></Image>
                                                         </div>
                                                     </div>
-                                                </Link>
+                                                </a>
                                             ) : (
-                                                <div className="border flex justify-between p-2 bg-white bg-opacity-80 hover:bg-gray-100 ease-in-out duration-200 rounded md:w-5/12  xl:w-96 hover:border-blue-400">
+                                                <div className="border flex justify-between p-2 bg-white dark:bg-gray-800 hover:dark:bg-gray-900 dark:border-gray-700 dark:text-white bg-opacity-80 hover:bg-gray-100 ease-in-out duration-200 rounded md:w-5/12  xl:w-96 hover:border-blue-400">
                                                     <div className="flex flex-col gap-2">
                                                         <div className="flex gap-2 items-center">
                                                             <Image src={match.opponents ? match.opponents[0]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
@@ -333,7 +333,7 @@ const Ranking = ({ slug }) => {
                                                         {match.status === "pending" && match.scheduled_datetime !== null &&
                                                             <div className="h-full flex flex-col justify-center items-center mr-6">
                                                                 <div className="flex flex-col justify-center items-center">
-                                                                    <p className="text-sm text-center text-gray-600">{dateFormatter(`${match.scheduled_datetime}`)}</p>
+                                                                    <p className="text-sm text-center text-gray-600 dark:text-white">{dateFormatter(`${match.scheduled_datetime}`)}</p>
                                                                 </div>
                                                             </div>
                                                         }

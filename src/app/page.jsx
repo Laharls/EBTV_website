@@ -27,8 +27,8 @@ const Homepage = async () => {
             priority />
 
           <div className="flex flex-col justify-center items-center gap-4">
-            <p className="font-bold text-xl">Saison 2</p>
-            <p className="font-bold text-xl text-center">11 divisions, 88 équipes, 520 joueurs !</p>
+            <p className="font-bold text-xl dark:text-white">Saison 2</p>
+            <p className="font-bold text-xl text-center dark:text-white">11 divisions, 88 équipes, 520 joueurs !</p>
 
           </div>
         </div>
