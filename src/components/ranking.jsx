@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 
 const stageIdMap = {
     "7536642295841865728": "1",
@@ -27,6 +27,14 @@ async function fetchingData(id) {
 
 async function getAllMatchDivision(id) {
     const query = await fetch(`http://localhost:8000/api/toornament/sp3/s2/matches?stage_ids=${id}`, {
+        method: "GET",
+    });
+
+    return query;
+}
+
+async function fetchVodMatch(match_ids) {
+    const query = await fetch(`http://localhost:8000/api/toornament/getVod?match_ids=${match_ids}`, {
         method: "GET",
     });
 
@@ -76,6 +84,7 @@ const Ranking = ({ slug }) => {
     const [divisionData, setDivisionData] = useState(null);
     const [divisionRound, setDivisionRound] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
+    const [hasVod, setHasVod] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -87,14 +96,22 @@ const Ranking = ({ slug }) => {
                 }
 
                 const responseData = await response.json();
-
                 const divisionRound = await getAllMatchDivision(divisionId);
+
 
                 if (!divisionRound.ok) {
                     throw new Error("Failed to fetch match data from API", response);
                 }
 
                 const responseDivisionRound = await divisionRound.json();
+                const matchPotentielVod = responseDivisionRound.filter(obj => obj.status === 'completed');
+
+                const array_match_id = matchPotentielVod.map(match => match.id).join(',');
+
+                const vodMatch = await fetchVodMatch(array_match_id);
+                const responseVodMatch = await vodMatch.json();
+
+                setHasVod(responseVodMatch);
 
                 // Use Web Worker for groupByRoundId function
                 const worker = new Worker('/groupByRoundIdWorker.js');
@@ -256,39 +273,77 @@ const Ranking = ({ slug }) => {
                         <div key={weekIndex} className="flex flex-col mt-2 mb-2">
                             <h2 className="text-xl font-semibold mb-2">Semaine {weekIndex + 1}</h2>
                             <div className="flex flex-col flex-wrap gap-4 md:flex-row">
-                                {weekData.map((match, matchIndex) => (
-                                    <div key={matchIndex} className="border flex justify-between p-2 bg-white bg-opacity-80 hover:bg-gray-100 ease-in-out duration-200 rounded md:w-5/12  xl:w-96 hover:border-blue-400">
-                                        <div className="flex flex-col gap-2">
-                                            <div className="flex gap-2 items-center">
-                                                <Image src={match.opponents ? match.opponents[0]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
-                                                <p className="text-sm font-medium">  {match.opponents[0].participant.name}</p>
-                                            </div>
+                                {weekData.map((match, matchIndex) => {
+                                    const matchingObject = hasVod.find(item => item.match_id === match.id);
 
-                                            <div className="flex gap-2 items-center">
-                                                <Image src={match.opponents ? match.opponents[1]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
-                                                <p className="text-sm font-medium">{match.opponents[1].participant.name}</p>
+                                    const linkHref = matchingObject ? matchingObject.url : null;
+                                    return (
+                                        <Fragment key={matchIndex}>
+                                            {linkHref !== null ? (
+                                                <Link href={linkHref} className="border flex justify-between p-2 bg-white bg-opacity-80 hover:bg-gray-100 ease-in-out duration-200 rounded md:w-5/12  xl:w-96 hover:border-blue-400">
+                                                    <div className="flex flex-col gap-2">
+                                                        <div className="flex gap-2 items-center">
+                                                            <Image src={match.opponents ? match.opponents[0]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
+                                                            <p className="text-sm font-medium">  {match.opponents[0].participant.name}</p>
+                                                        </div>
 
-                                            </div>
+                                                        <div className="flex gap-2 items-center">
+                                                            <Image src={match.opponents ? match.opponents[1]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
+                                                            <p className="text-sm font-medium">{match.opponents[1].participant.name}</p>
 
-                                        </div>
-                                        <div>
-                                            {match.status === "completed" &&
-                                                <div className="mr-6 flex flex-col justify-center items-center gap-2">
-                                                    <p className={`${match.opponents[0].result === 'win' ? 'text-green-600' : 'text-red-600'}`}>{match.opponents[0].score}</p>
-                                                    <p className={`${match.opponents[1].result === 'win' ? 'text-green-600' : 'text-red-600'}`}>{match.opponents[1].score}</p>
-                                                </div>
-                                            }
+                                                        </div>
 
-                                            {match.status === "pending" && match.scheduled_datetime !== null &&
-                                                <div className="h-full flex flex-col justify-center items-center mr-6">
-                                                    <div className="flex flex-col justify-center items-center">
-                                                        <p className="text-sm text-center text-gray-600">{dateFormatter(`${match.scheduled_datetime}`)}</p>
+                                                    </div>
+                                                    <div className="flex h-fit">
+                                                        {match.status === "completed" &&
+                                                            <div className="mr-6 flex flex-col justify-center items-center gap-2">
+                                                                <p className={`${match.opponents[0].result === 'win' ? 'text-green-600' : 'text-red-600'}`}>{match.opponents[0].score}</p>
+                                                                <p className={`${match.opponents[1].result === 'win' ? 'text-green-600' : 'text-red-600'}`}>{match.opponents[1].score}</p>
+                                                            </div>
+                                                        }
+
+                                                        <div className="flex justify-center items-center">
+                                                            <Image src="/vod.png" alt="Vod Icon" width={50} height={50}></Image>
+                                                        </div>
+                                                    </div>
+                                                </Link>
+                                            ) : (
+                                                <div className="border flex justify-between p-2 bg-white bg-opacity-80 hover:bg-gray-100 ease-in-out duration-200 rounded md:w-5/12  xl:w-96 hover:border-blue-400">
+                                                    <div className="flex flex-col gap-2">
+                                                        <div className="flex gap-2 items-center">
+                                                            <Image src={match.opponents ? match.opponents[0]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
+                                                            <p className="text-sm font-medium">  {match.opponents[0].participant.name}</p>
+                                                        </div>
+
+                                                        <div className="flex gap-2 items-center">
+                                                            <Image src={match.opponents ? match.opponents[1]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
+                                                            <p className="text-sm font-medium">{match.opponents[1].participant.name}</p>
+
+                                                        </div>
+
+                                                    </div>
+                                                    <div>
+                                                        {match.status === "completed" &&
+                                                            <div className="mr-6 flex flex-col justify-center items-center gap-2">
+                                                                <p className={`${match.opponents[0].result === 'win' ? 'text-green-600' : 'text-red-600'}`}>{match.opponents[0].score}</p>
+                                                                <p className={`${match.opponents[1].result === 'win' ? 'text-green-600' : 'text-red-600'}`}>{match.opponents[1].score}</p>
+                                                            </div>
+                                                        }
+
+                                                        {match.status === "pending" && match.scheduled_datetime !== null &&
+                                                            <div className="h-full flex flex-col justify-center items-center mr-6">
+                                                                <div className="flex flex-col justify-center items-center">
+                                                                    <p className="text-sm text-center text-gray-600">{dateFormatter(`${match.scheduled_datetime}`)}</p>
+                                                                </div>
+                                                            </div>
+                                                        }
                                                     </div>
                                                 </div>
+                                            )
                                             }
-                                        </div>
-                                    </div>
-                                ))}
+                                        </Fragment>
+                                    );
+                                })}
                             </div>
                         </div>
                     ))
