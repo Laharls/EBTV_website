@@ -54,29 +54,29 @@ function dateFormatter(date) {
     return formatter.format(dateTime);
 }
 
-// function groupByRoundId(data) {
-//     const sortedData = data.sort((a, b) => a.round_id.localeCompare(b.round_id));
+function groupByRoundId(data) {
+    const sortedData = data.sort((a, b) => a.round_id.localeCompare(b.round_id));
 
-//     // Group the objects by round_id
-//     const groupedData = sortedData.reduce((acc, obj) => {
-//         const roundId = obj.round_id;
-//         if (!acc[roundId]) {
-//             acc[roundId] = [];
-//         }
-//         acc[roundId].push(obj);
-//         return acc;
-//     }, {});
+    // Group the objects by round_id
+    const groupedData = sortedData.reduce((acc, obj) => {
+        const roundId = obj.round_id;
+        if (!acc[roundId]) {
+            acc[roundId] = [];
+        }
+        acc[roundId].push(obj);
+        return acc;
+    }, {});
 
-//     const dataArray = Object.values(groupedData);
+    const dataArray = Object.values(groupedData);
 
-//     // Create an object with numeric indices for each array
-//     const indexedData = {};
-//     dataArray.forEach((array, index) => {
-//         indexedData[index + 1] = array;
-//     });
+    // Create an object with numeric indices for each array
+    const indexedData = {};
+    dataArray.forEach((array, index) => {
+        indexedData[index + 1] = array;
+    });
 
-//     return indexedData;
-// }
+    return indexedData;
+}
 
 const Ranking = ({ slug }) => {
 
@@ -113,23 +113,11 @@ const Ranking = ({ slug }) => {
 
                 setHasVod(responseVodMatch);
 
-                // Use Web Worker for groupByRoundId function
-                const worker = new Worker('/groupByRoundIdWorker.js');
-                worker.postMessage(responseDivisionRound);
-
-                worker.onmessage = function (event) {
-                    setDivisionRound(event.data);
-                };
-
-                // const groupedbyRounds = await groupByRoundId(responseDivisionRound)
+                const groupedbyRounds = await groupByRoundId(responseDivisionRound)
 
                 await setDivisionData(responseData);
 
-                // await setDivisionRound(groupedbyRounds);
-
-                return () => {
-                    worker.terminate();
-                };
+                await setDivisionRound(groupedbyRounds);
 
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -237,7 +225,7 @@ const Ranking = ({ slug }) => {
                                     </th>
                                     <td className="px-6 py-4 flex">
                                         <div className="mr-2">
-                                            <Image src={team.participant ? team.participant?.custom_fields.logo?.logo_small : ""} alt="" width={25} height={25} /> </div> <div className="font-semibold text-xl">{team.participant?.name}</div>
+                                            <Image src={team.participant ? team.participant?.custom_fields.logo?.logo_small : ""} alt="Logo de l'équipe" width={25} height={25} /> </div> <div className="font-semibold text-xl">{team.participant?.name}</div>
                                     </td>
                                     <td className="px-6 py-4 text-center font-semibold text-xl">
                                         {team.properties.played}
@@ -283,12 +271,12 @@ const Ranking = ({ slug }) => {
                                                 <a href={linkHref} target="_blank" rel="noopener noreferrer" className="border flex justify-between p-2 bg-white dark:bg-gray-800 dark:border-gray-700 hover:dark:bg-gray-900 dark:text-white bg-opacity-80 hover:bg-gray-100 ease-in-out duration-200 rounded md:w-5/12  xl:w-96 hover:border-blue-400">
                                                     <div className="flex flex-col gap-2">
                                                         <div className="flex gap-2 items-center">
-                                                            <Image src={match.opponents ? match.opponents[0]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
+                                                            <Image src={match.opponents ? match.opponents[0]?.participant.custom_fields.logo?.logo_small : ""} alt="Logo de l'équipe 1" width={23} height={20} />
                                                             <p className="text-sm font-medium">  {match.opponents[0].participant.name}</p>
                                                         </div>
 
                                                         <div className="flex gap-2 items-center">
-                                                            <Image src={match.opponents ? match.opponents[1]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
+                                                            <Image src={match.opponents ? match.opponents[1]?.participant.custom_fields.logo?.logo_small : ""} alt="Logo de l'équipe 2" width={23} height={20} />
                                                             <p className="text-sm font-medium">{match.opponents[1].participant.name}</p>
 
                                                         </div>
@@ -311,12 +299,12 @@ const Ranking = ({ slug }) => {
                                                 <div className="border flex justify-between p-2 bg-white dark:bg-gray-800 hover:dark:bg-gray-900 dark:border-gray-700 dark:text-white bg-opacity-80 hover:bg-gray-100 ease-in-out duration-200 rounded md:w-5/12  xl:w-96 hover:border-blue-400">
                                                     <div className="flex flex-col gap-2">
                                                         <div className="flex gap-2 items-center">
-                                                            <Image src={match.opponents ? match.opponents[0]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
+                                                            <Image src={match.opponents ? match.opponents[0]?.participant.custom_fields.logo?.logo_small : ""} alt="Logo de l'équipe 1" width={23} height={20} />
                                                             <p className="text-sm font-medium">  {match.opponents[0].participant.name}</p>
                                                         </div>
 
                                                         <div className="flex gap-2 items-center">
-                                                            <Image src={match.opponents ? match.opponents[1]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
+                                                            <Image src={match.opponents ? match.opponents[1]?.participant.custom_fields.logo?.logo_small : ""} alt="Logo de l'équipe 2" width={23} height={20} />
                                                             <p className="text-sm font-medium">{match.opponents[1].participant.name}</p>
 
                                                         </div>

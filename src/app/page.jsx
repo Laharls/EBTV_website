@@ -5,26 +5,15 @@ import PreviewRank from "@/components/preview_rank";
 const Homepage = async () => {
   return (
     <div className="h-full flex flex-col px-4 sm:px-8 md:px-12 lg:px-20">
-      {/*INTRODUCTION CONTAINER */}
       <div className="flex flex-col justify-center gap-12">
-        {/*INTRODUCTION TEXTE */}
         <div className="flex justify-center items-center gap-8 mt-4">
-          {/*IMAGE TEXTE */}
           <Image
-            src="/ebtv_logo.webp"
-            alt=""
-            width={75}
-            height={75}
-            className="sm:hidden"
-            priority />
-
-          <Image
-            src="/ebtv_logo.webp"
-            alt=""
-            width={150}
-            height={150}
-            className="hidden sm:flex"
-            priority />
+            src="/ebtv_logo.png"
+            alt="Logo ebtv Splatoon 3"
+            width={120}
+            height={120}
+            priority
+            unoptimized />
 
           <div className="flex flex-col justify-center items-center gap-4">
             <p className="font-bold text-xl dark:text-white">Saison 2</p>
@@ -37,10 +26,8 @@ const Homepage = async () => {
 
         </div>
 
-        {/*SECTION PROCHAINS MATCHS A VENIR */}
         <PreviewRank></PreviewRank>
 
-        {/*ARTICLE */}
         <div className="flex flex-col justify-center items-center gap-4">
 
         </div>

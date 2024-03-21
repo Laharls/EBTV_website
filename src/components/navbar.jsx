@@ -12,9 +12,9 @@ const links = [
 ];
 
 const socialLinks = [
-    { url: "https://discord.gg/ebtv-splatoon", logo: "/discord.png" },
-    { url: "https://twitter.com/esportbrostv", logo: "/twitter.png" },
-    { url: "https://www.youtube.com/channel/UCfxjf8qf7UvdOuJxKvvaQ_A", logo: "/youtube.png" },
+    { url: "https://discord.gg/ebtv-splatoon", logo: "/discord.png", alt: 'Logo Discord' },
+    { url: "https://twitter.com/esportbrostv", logo: "/twitter.png", alt: 'Logo Twitter' },
+    { url: "https://www.youtube.com/channel/UCfxjf8qf7UvdOuJxKvvaQ_A", logo: "/youtube.png", alt: 'Logo Youtube' },
 ]
 
 const Navbar = () => {
@@ -98,14 +98,8 @@ const Navbar = () => {
     return (
         <div className="h-full flex items-center justify-between bg-black px-4 sm:px-8 md:px-12 lg:px-20">
             <Link href="/">
-                <div className="flex justify-center items-center gap-4">
-                    <Image
-                        src="/logo_sp3.webp"
-                        alt=""
-                        width={35}
-                        height={35}
-                    />
-
+                <div className="flex justify-center items-center gap-4 ">
+                    <Image src="/logo_sp3.png" alt="Logo Discord" width={53} height={53} priority unoptimized />
                     <h1 className="text-md font-bold sm:text-lg md:text-2xl text-white">Ligue EBTV</h1>
                 </div>
             </Link>
@@ -121,19 +115,19 @@ const Navbar = () => {
 
             <div className="hidden md:flex gap-4">
                 <Link href="https://discord.gg/ebtv-splatoon" rel="noopener noreferrer" target="_blank" className="text-white">
-                    <Image src="/discord.png" alt="" width={35} height={35} unoptimized />
+                    <Image src="/discord.png" alt="Logo Discord" width={35} height={35} unoptimized />
                 </Link>
                 <Link href="https://twitter.com/esportbrostv" rel="noopener noreferrer" target="_blank" className="text-white">
-                    <Image src="/twitter.png" alt="" width={35} height={35} unoptimized />
+                    <Image src="/twitter.png" alt="Logo Twitter" width={35} height={35} unoptimized />
                 </Link>
                 <Link href="https://www.youtube.com/channel/UCfxjf8qf7UvdOuJxKvvaQ_A" rel="noopener noreferrer" target="_blank" className="text-white">
-                    <Image src="/youtube.png" alt="" width={35} height={35} unoptimized />
+                    <Image src="/youtube.png" alt="Logo Youtube" width={35} height={35} unoptimized />
                 </Link>
             </div>
 
             <div className="md:hidden">
                 {/*MENU BUTTON*/}
-                <button className="w-10 h-8 flex flex-col justify-between z-50 relative" onClick={(() => setOpen(!open))}>
+                <button className="w-10 h-8 flex flex-col justify-between z-50 relative" aria-label="Menu mobile" onClick={(() => setOpen(!open))}>
                     <motion.div variants={topVariants} animate={open ? "opened" : "closed"} className="w-10 h-1 bg-white rounded origin-left"></motion.div>
                     <motion.div variants={centerVariants} animate={open ? "opened" : "closed"} className="w-10 h-1 bg-white rounded"></motion.div>
                     <motion.div variants={bottomVariants} animate={open ? "opened" : "closed"} className="w-10 h-1 bg-white rounded origin-left"></motion.div>
@@ -150,7 +144,7 @@ const Navbar = () => {
                         <div className="flex flex-row gap-4">
                             {socialLinks.map(social => (
                                 <motion.div variants={listItemVariants} key={social.logo}>
-                                    <Link href={social.url} onClick={() => setOpen(false)} rel="noopener noreferrer" target="_blank" className="text-white"><Image src={social.logo} alt="" width={50} height={50} /></Link>
+                                    <Link href={social.url} onClick={() => setOpen(false)} rel="noopener noreferrer" target="_blank" className="text-white"><Image src={social.logo} alt={social.alt} width={50} height={50} /></Link>
                                 </motion.div>
                             ))}
                         </div>

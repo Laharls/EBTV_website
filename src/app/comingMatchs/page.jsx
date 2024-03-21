@@ -134,12 +134,12 @@ const ComingMatchs = () => {
                                                 {/* Render match details */}
                                                 <div className="flex flex-col gap-2">
                                                     <div className="flex gap-2 items-center">
-                                                        <Image src={match.opponents ? match.opponents[0]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
+                                                        <Image src={match.opponents ? match.opponents[0]?.participant.custom_fields.logo?.logo_small : ""} alt="Logo de l'équipe 1" width={23} height={20} />
                                                         <p className="text-sm font-medium">  {match.opponents[0].participant.name}</p>
                                                     </div>
 
                                                     <div className="flex gap-2 items-center">
-                                                        <Image src={match.opponents ? match.opponents[1]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
+                                                        <Image src={match.opponents ? match.opponents[1]?.participant.custom_fields.logo?.logo_small : ""} alt="Logo de l'équipe 2" width={23} height={20} />
                                                         <p className="text-sm font-medium">{match.opponents[1].participant.name}</p>
 
                                                     </div>
@@ -172,12 +172,12 @@ const ComingMatchs = () => {
                                                 {/* Render match details */}
                                                 <div className="flex flex-col gap-2">
                                                     <div className="flex gap-2 items-center">
-                                                        <Image src={match.opponents ? match.opponents[0]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
+                                                        <Image src={match.opponents ? match.opponents[0]?.participant.custom_fields.logo?.logo_small : ""} alt="Logo de l'équipe 1" width={23} height={20} />
                                                         <p className="text-sm font-medium">  {match.opponents[0].participant.name}</p>
                                                     </div>
 
                                                     <div className="flex gap-2 items-center">
-                                                        <Image src={match.opponents ? match.opponents[1]?.participant.custom_fields.logo?.logo_small : ""} alt="" width={23} height={20} />
+                                                        <Image src={match.opponents ? match.opponents[1]?.participant.custom_fields.logo?.logo_small : ""} alt="Logo de l'équipe 2" width={23} height={20} />
                                                         <p className="text-sm font-medium">{match.opponents[1].participant.name}</p>
 
                                                     </div>

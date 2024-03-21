@@ -6,7 +6,7 @@ const Footer = () => {
         <div className="h-full bg-black text-white flex flex-col gap-2 items-center md:flex-row md:justify-evenly sm:px-8 md:px-12 lg:px-20">
             <div className="mt-2 sm:mt-0">
                 <Link href="https://esportbros.tv/">
-                    <Image src="/ebtv.png" alt="" width={100} height={100} className="" />
+                    <Image src="/ebtv.png" alt="Logo eSportBrosTV" width={100} height={100} className="" />
                 </Link>
             </div>
 
@@ -22,7 +22,7 @@ const Footer = () => {
 
             <div>
                 <Link href="https://www.toornament.com/">
-                    <Image src="/toornament.png" alt="" width={200} height={200} className="" />
+                    <Image src="/toornament.png" alt="Logo Toornament" width={200} height={200} className="" />
                 </Link>
             </div>
 

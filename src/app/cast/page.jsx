@@ -7,7 +7,7 @@ async function fetchingData(id) {
     const query = await fetch(`http://localhost:8000/api/toornament/sp3/s2/division?stage_ids=${id}`, {
         method: "GET",
     });
-    return query; // Return the response directly
+    return query;
 }
 
 const stageIdMap = {
@@ -118,7 +118,7 @@ const Cast = () => {
                                         </th>
                                         <td className="px-6 py-10 flex">
                                             <div className="mr-2">
-                                                <Image src={team.participant ? team.participant?.custom_fields.logo?.icon_small : ""} alt="" width={25} height={25} /> </div> <div className="w-40 lg:w-auto font-semibold text-xl">{team.participant?.name}</div>
+                                                <Image src={team.participant ? team.participant?.custom_fields.logo?.icon_small : ""} alt="Logo de l'équipe" width={25} height={25} /> </div> <div className="w-40 lg:w-auto font-semibold text-xl">{team.participant?.name}</div>
                                         </td>
                                         <td className="px-6 py-10 text-center font-semibold text-xl">
                                             {team.properties.played}
@@ -155,45 +155,3 @@ const Cast = () => {
 }
 
 export default Cast;
-
-
-
-
-// {/* <div className="flex flex-col gap-4 items-center justify-center h-full">
-//                     <div className="flex flex-col justify-center items-center h-full">
-//                         <div className="bg-white bg-opacity-40">
-//                             <table className="table-auto w-full overflow-x-auto">
-//                                 <thead>
-//                                     <tr>
-//                                         <th className="px-4 py-2 text-center">Rang</th>
-//                                         <th className="px-4 py-2 text-center" colSpan={2}>Equipe</th>
-//                                         <th className="px-4 py-2 text-center">J</th>
-//                                         <th className="px-4 py-2 text-center">V</th>
-//                                         <th className="px-4 py-2 text-center">D</th>
-//                                         <th className="px-4 py-2 text-center">M+</th>
-//                                         <th className="px-4 py-2 text-center">M-</th>
-//                                         <th className="px-4 py-2 text-center">+/-</th>
-//                                         <th className="px-4 py-2 text-center">Pts</th>
-//                                     </tr>
-//                                 </thead>
-//                                 <tbody>
-//                                     {divisionData?.map((team) => (
-//                                         <tr key={team.id} className="border-b border-gray-300 border-opacity-70">
-//                                             <td className="px-4 py-2 text-center">{team.position}</td>
-//                                             <td className="py-2 flex gap-4 justify-center items-center"> <div> <Image src={team.participant ? team.participant?.custom_fields.logo?.icon_small : ""} alt="" width={25} height={25} /> </div> <div className="w-40 border-0 text-center">{team.participant?.name}</div> </td>
-//                                             <td className="px-4 py-2 text-center">{/* Empty cell to align with the "Nom" header */}</td >
-//                                             <td className="px-4 py-2 text-center">{team.properties.played}</td>
-//                                             <td className="px-4 py-2 text-center">{team.properties.wins}</td>
-//                                             <td className="px-4 py-2 text-center">{team.properties.losses}</td>
-//                                             <td className="px-4 py-2 text-center">{team.properties.score_for}</td>
-//                                             <td className="px-4 py-2 text-center">{team.properties.score_against}</td>
-//                                             <td className="px-4 py-2 text-center">{team.properties.score_difference}</td>
-//                                             <td className="px-4 py-2 text-center">{team.points === null ? "0" : team.points}</td>
-//                                         </tr >
-//                                     ))}
-//                                 </tbody >
-//                             </table >
-//                         </div >
-//                     </div >
-
-//                 </div > * /}
