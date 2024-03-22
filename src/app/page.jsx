@@ -1,6 +1,7 @@
 import Image from "next/image";
 
-import PreviewRank from "@/components/preview_rank";
+import PreviewRank from "@/components/ranks/previewRank";
+import { toornamentIdLeagueS2, divisionIdLeagueS2 } from '@/data/toornamentId';
 
 const Homepage = async () => {
   return (
@@ -18,19 +19,10 @@ const Homepage = async () => {
           <div className="flex flex-col justify-center items-center gap-4">
             <p className="font-bold text-xl dark:text-white">Saison 2</p>
             <p className="font-bold text-xl text-center dark:text-white">11 divisions, 88 équipes, 520 joueurs !</p>
-
           </div>
         </div>
 
-        <div className="flex flex-col justify-center items-center gap-8">
-
-        </div>
-
-        <PreviewRank></PreviewRank>
-
-        <div className="flex flex-col justify-center items-center gap-4">
-
-        </div>
+        <PreviewRank tournamentId={toornamentIdLeagueS2} divisionIds={divisionIdLeagueS2}></PreviewRank>
       </div>
     </div>
   )

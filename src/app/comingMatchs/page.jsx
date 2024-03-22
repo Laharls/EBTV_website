@@ -2,48 +2,13 @@
 
 import Image from "next/image";
 import { useEffect, useState } from 'react';
-
-async function fetchComingMatch() {
-    const query = await fetch(`http://localhost:8000/api/toornament/comingMatches`, {
-        method: "GET",
-    });
-
-    const response = await query.json()
-    return response; // Return the response directly
-}
-
-async function fetchStreamMatch(data) {
-    const query = await fetch(`http://localhost:8000/api/toornament/streamMatches`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    });
-
-    const response = await query.json()
-    return response; // Return the response directly
-}
-
-function dateFormatter(date) {
-    const dateTime = new Date(date);
-
-    const formatter = new Intl.DateTimeFormat('fr-FR', {
-        day: 'numeric',
-        month: 'long',
-        hour: 'numeric',
-        minute: 'numeric',
-    });
-
-    return formatter.format(dateTime);
-}
-
+import { formatFrenchDateTime } from "@/utils/date/date";
+import { fetchComingMatch, fetchStreamMatch, groupMatchByDate } from "@/utils/toornament/match";
 
 const ComingMatchs = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isTest, setIsTest] = useState(null);
     const [streamMatches, setStreamMatches] = useState(null);
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -59,15 +24,7 @@ const ComingMatchs = () => {
                     };
                 });
 
-                // Group matches by date
-                const matchesByDate = {};
-                comingMatch.forEach(match => {
-                    const date = formatDate(match.scheduled_datetime);
-                    if (!matchesByDate[date]) {
-                        matchesByDate[date] = [];
-                    }
-                    matchesByDate[date].push(match);
-                });
+                const matchesByDate = await groupMatchByDate(comingMatch);
 
                 setIsTest(matchesByDate);
 
@@ -83,13 +40,6 @@ const ComingMatchs = () => {
 
         fetchData();
     }, []);
-
-    const formatDate = (dateString) => {
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        const date = new Date(dateString);
-        const formattedDate = date.toLocaleDateString('fr-FR', options);
-        return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
-    };
 
     return (
         <div className="h-full flex flex-col px-4 mb-8 sm:px-8 md:px-12 lg:px-20">
@@ -121,11 +71,6 @@ const ComingMatchs = () => {
                                             // Check if a corresponding match is found and its id matches the stream's match_id
                                             if (correspondingMatch && correspondingMatch?.id === stream.match.match_id) {
                                                 correspondingMatch.url = stream.result.url;
-                                                // return (
-                                                //     <div key={streamIndex} className="flex justify-center items-center">
-                                                //         <Image src="/live.png" alt="Live Icon" width={50} height={50}></Image>
-                                                //     </div>
-                                                // );
                                             }
                                         })}
 
@@ -155,7 +100,7 @@ const ComingMatchs = () => {
                                                     {match.status === "pending" && match.scheduled_datetime !== null &&
                                                         <div className="h-full flex flex-col justify-center items-center mr-6">
                                                             <div className="flex flex-col justify-center items-center">
-                                                                <p className="text-sm text-center text-gray-600 dark:text-white">{dateFormatter(`${match.scheduled_datetime}`)}</p>
+                                                                <p className="text-sm text-center text-gray-600 dark:text-white">{formatFrenchDateTime(`${match.scheduled_datetime}`)}</p>
                                                             </div>
                                                         </div>
                                                     }
@@ -194,7 +139,7 @@ const ComingMatchs = () => {
                                                     {match.status === "pending" && match.scheduled_datetime !== null &&
                                                         <div className="h-full flex flex-col justify-center items-center mr-6">
                                                             <div className="flex flex-col justify-center items-center">
-                                                                <p className="text-sm text-center text-gray-600 dark:text-white">{dateFormatter(`${match.scheduled_datetime}`)}</p>
+                                                                <p className="text-sm text-center text-gray-600 dark:text-white">{formatFrenchDateTime(`${match.scheduled_datetime}`)}</p>
                                                             </div>
                                                         </div>
                                                     }
