@@ -1,4 +1,4 @@
-import { groupObjectsById, reverseObject, splitObjectIntoChunks } from '@/utils/objectUtils'
+import { groupObjectsById, splitObjectIntoChunks } from '@/utils/objectUtils'
 
 async function getDivision(id) {
   const query = await fetch(`http://localhost:8000/api/toornament/sp3/s2/division?stage_ids=${id}`, {
@@ -8,8 +8,8 @@ async function getDivision(id) {
 }
 
 async function getRank(tournamentId, stageIds) {
-  const rank = await fetch(`http://localhost:8000/api/toornament/v2/rank?tournament_ids=${tournamentId}&stage_ids=${stageIds}`);
-  return rank.json();
+  const rank = await fetch(`http://localhost:8000/api/toornament/v2/rank?tournament_ids=${tournamentId}&groups_ids=${stageIds}`, {cache: 'reload'});
+  return await rank.json();
 }
 
 async function rankSeason(toornamentId, divisionIds) {
@@ -22,9 +22,7 @@ async function rankSeason(toornamentId, divisionIds) {
 
   const mergedResponse = responseRank.reduce((acc, curr) => acc.concat(curr), []);
   const division = groupObjectsById(mergedResponse);
-  const divisionOrdered = reverseObject(division);
-
-  return divisionOrdered;
+  return division;
 }
 
 module.exports = {

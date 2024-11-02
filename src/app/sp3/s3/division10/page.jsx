@@ -1,5 +1,5 @@
 import Ranking from '@/components/ranks/globalRanking';
-import { divisionIdLeagueS2 } from '@/data/toornamentId';
+import { divisionIdLeagueS3 } from '@/data/toornamentId';
 
 const DivisionPage = () => {
     return (

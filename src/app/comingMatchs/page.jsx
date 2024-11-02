@@ -6,7 +6,7 @@ import { formatFrenchDateTime } from "@/utils/date/date";
 import { fetchComingMatch, fetchStreamMatch, groupMatchByDate } from "@/utils/toornament/match";
 
 const ComingMatchs = () => {
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(null);
     const [isTest, setIsTest] = useState(null);
     const [streamMatches, setStreamMatches] = useState(null);
 
@@ -39,6 +39,7 @@ const ComingMatchs = () => {
         };
 
         fetchData();
+        
     }, []);
 
     return (

@@ -1,8 +1,7 @@
 import Image from "next/image";
 
 import PreviewRank from "@/components/ranks/previewRank";
-import { toornamentIdLeagueS2, divisionIdLeagueS2 } from '@/data/toornamentId';
-import { color } from "framer-motion";
+import { toornamentIdLeagueS3, divisionIdLeagueS3 } from '@/data/toornamentId';
 
 const Homepage = async () => {
   return (
@@ -24,7 +23,7 @@ const Homepage = async () => {
           </div>
         </div>
 
-        <PreviewRank tournamentId={toornamentIdLeagueS2} divisionIds={divisionIdLeagueS2}></PreviewRank>
+        <PreviewRank tournamentId={toornamentIdLeagueS3} divisionIds={divisionIdLeagueS3}></PreviewRank>
       </div>
     </div>
   )

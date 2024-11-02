@@ -11,17 +11,18 @@ import SeasonMatchPlanning from "@/components/seasonMatchPlanning";
 import TableRank from "@/components/ranks/tableRank";
 
 const stageIdMap = {
-    "7536642295841865728": "1",
-    "7536640081084391424": "2",
-    "7536596345101762560": "3",
-    "7536593471567388672": "4",
-    "7536584899792535552": "5",
-    "7536577779904667648": "6",
-    "7536551181308936192": "7",
-    "7536546455548297216": "8",
-    "7536542055986692096": "9",
-    "7536536195342868480": "10",
-    "7536519095150829568": "11",
+    "8264675124462264320": "1",
+    "8264737497420021760": "2",
+    "8264738600411373568": "3",
+    "8264739402440654848": "4",
+    "8264740916637990912": "5",
+    "8264741890458460160": "6",
+    "8264742868431765504": "7",
+    "8264743548782149632": "8",
+    "8264744252364947456": "9",
+    "8264744933675859968": "10",
+    "8264745766931554304": "11",
+    "8279666790566993920": "12",
 };
 
 const Ranking = ({ slug }) => {
@@ -82,7 +83,7 @@ const Ranking = ({ slug }) => {
                 <div className="hidden sm:flex justify-center mt-8 mb-8">
                     {stageIdMap &&
                         <div className="flex items-center space-x-4">
-                            {[...Array(11)].map((_, index) => (
+                            {[...Array(12)].map((_, index) => (
                                 <Link key={index} href={`/sp3/s2/division${index + 1}`} className="font-bold text-2xl hover:text-blue-600 ease-in-out duration-200 dark:text-white">D{index + 1}</Link>
                             ))}
                         </div>
