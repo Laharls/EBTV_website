@@ -84,7 +84,7 @@ const Ranking = ({ slug }) => {
                     {stageIdMap &&
                         <div className="flex items-center space-x-4">
                             {[...Array(12)].map((_, index) => (
-                                <Link key={index} href={`/sp3/s2/division${index + 1}`} className="font-bold text-2xl hover:text-blue-600 ease-in-out duration-200 dark:text-white">D{index + 1}</Link>
+                                <Link key={index} href={`/sp3/s3/division${index + 1}`} className="font-bold text-2xl hover:text-blue-600 ease-in-out duration-200 dark:text-white">D{index + 1}</Link>
                             ))}
                         </div>
                     }

@@ -47,7 +47,7 @@ const PreviewRank = ({ tournamentId, divisionIds }) => {
       }
 
       {!isLoading && Object.entries(previewRanking).map(([_, divisionRank], index) =>
-        <Link href={`/sp3/s2/division${index + 1} `} prefetch={false} key={index}>
+        <Link href={`/sp3/s3/division${index + 1} `} prefetch={false} key={index}>
           <ParticipantRank index={index} divisionRank={divisionRank}/>
         </Link>
       )}

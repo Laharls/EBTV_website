@@ -37,8 +37,8 @@ const RankingDropdown = () => {
             {isOpen && (
                 <div className="absolute right-1/2 transform translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-10 max-h-48 overflow-y-auto">
                     <div className="py-1">
-                        {[...Array(11)].map((_, index) => (
-                            <Link key={index} href={`/sp3/s2/division${index + 1}`} className="block px-4 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-600">{`D${index + 1}`}</Link>
+                        {[...Array(12)].map((_, index) => (
+                            <Link key={index} href={`/sp3/s3/division${index + 1}`} className="block px-4 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-600">{`D${index + 1}`}</Link>
                         ))}
                     </div>
                 </div>
