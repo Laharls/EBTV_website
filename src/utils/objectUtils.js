@@ -32,7 +32,7 @@ function groupByRoundId(data) {
 }
 
 function reverseObject(object) {
-  const sortedKeys = Object.keys(object).sort((a, b) => parseInt(b) - parseInt(a));
+  const sortedKeys = Object.keys(object).sort((a, b) => parseInt(a) - parseInt(b));
   const sortedGrouped = {};
   for (const key of sortedKeys) {
     sortedGrouped[key] = object[key];
