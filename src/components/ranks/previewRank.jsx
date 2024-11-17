@@ -7,7 +7,7 @@ import { rankSeason } from '@/utils/toornament/rank';
 import  ParticipantRank  from '@/components/ranks/participantRank';
 
 const PreviewRank = ({ tournamentId, divisionIds }) => {
-  const [previewRanking, setPreviewRanking] = useState(null);
+  const [previewRanking, setPreviewRanking] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
